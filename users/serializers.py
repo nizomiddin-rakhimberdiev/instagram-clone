@@ -3,7 +3,7 @@ import uuid
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from shared.utilits import check_email_or_phone, send_email
+from shared.utilits import check_email_or_phone, send_email, send_phone_code
 from users.models import User, VIA_EMAIL, VIA_PHONE
 
 
