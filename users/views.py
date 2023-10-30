@@ -2,14 +2,14 @@ from django.shortcuts import render
 from django.utils.datetime_safe import datetime
 from rest_framework import permissions
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from shared.utilits import send_email
 from users.models import User, CODE_VERIFIED, NEW, VIA_EMAIL, VIA_PHONE
-from users.serializers import SignUpSerializer, UserSerializer
+from users.serializers import SignUpSerializer, UserSerializer, ChangeUserInformation
 
 
 # Create your views here.
@@ -86,6 +86,34 @@ class GetNewVerification(APIView):
                 "message": "Kodingiz hali ishlatish uchun yaroqli. Biroz kutib turing"
             }
             raise ValidationError(data)
+
+
+class ChangeUserInformationView(UpdateAPIView):
+    permissions = [IsAuthenticated, ]
+    serializer_class = ChangeUserInformation
+    http_method_names = ['patch', 'put']
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        super(ChangeUserInformationView, self).update(request, *args, **kwargs)
+        data = {
+            "success": True,
+            "message": "User updates successfully",
+            "auth_status": self.request.user.auth_status
+        }
+        return Response(data, status=200)
+
+    def partial_update(self, request, *args, **kwargs):
+        super(ChangeUserInformationView, self).partial_update(request, *args, **kwargs)
+        data = {
+            "success": True,
+            "message": "User updates successfully",
+            "auth_status": self.request.user.auth_status
+        }
+        return Response(data, status=200)
+
 
 
 class ListUserView(ListAPIView):
