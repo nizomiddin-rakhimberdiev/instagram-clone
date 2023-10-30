@@ -4,6 +4,7 @@ from .views import (CreateUserView,
                     VerifyAPIView,
                     GetNewVerification,
                     ChangeUserInformationView,
+                    ChangeUserPhotoView,
                     )
 
 urlpatterns = [
@@ -11,5 +12,6 @@ urlpatterns = [
     path('verify', VerifyAPIView.as_view()),
     path('new-verify', GetNewVerification.as_view()),
     path('change-user', ChangeUserInformationView.as_view()),
+    path('change-user-photo', ChangeUserPhotoView.as_view()),
     path('list', ListUserView.as_view()),
 ]

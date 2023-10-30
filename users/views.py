@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 
 from shared.utilits import send_email
 from users.models import User, CODE_VERIFIED, NEW, VIA_EMAIL, VIA_PHONE
-from users.serializers import SignUpSerializer, UserSerializer, ChangeUserInformation
+from users.serializers import SignUpSerializer, UserSerializer, ChangeUserInformation, ChangeUserPhotoSerializer
 
 
 # Create your views here.
@@ -114,6 +114,23 @@ class ChangeUserInformationView(UpdateAPIView):
         }
         return Response(data, status=200)
 
+
+class ChangeUserPhotoView(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    def put(self, request, *args, **kwargs):
+        serializer = ChangeUserPhotoSerializer(data=request.data)
+        if serializer.is_valid():
+            user = request.user
+            serializer.update(user, serializer.validated_data)
+            return Response(
+                {
+                    "message": "Image updated seccessfully"
+                }, status=200
+            )
+        return Response(
+            serializer.errors, status=400
+        )
 
 
 class ListUserView(ListAPIView):
